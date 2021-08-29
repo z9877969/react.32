@@ -1,13 +1,15 @@
 import Button from "../_share/Button/Button";
 import css from "./MainInfo.module.css";
 
-const MainInfo = ({ dataInfo, title, handler }) => {
+const MainInfo = ({ dataInfo, title, handleOpenTransaction, transType }) => {
+  const cbOnClick = () => handleOpenTransaction(transType);
+  const contentTitle = title[transType]?.ru || "Баланс";
   return (
     <section className={css.section}>
       <div className={css.container}>
         <div className={css.wrapper}>
           <div className={css.secondaryWrapper}>
-            <h2 className={css.title}>{title}</h2>
+            <h2 className={css.title}>{contentTitle}</h2>
             <p className={css.currency}>USD</p>
           </div>
 
@@ -20,7 +22,11 @@ const MainInfo = ({ dataInfo, title, handler }) => {
             ))}
           </ul>
         </div>
-        <Button title="Add" cbOnClick={handler} className={css.button} />
+        <Button
+          title="Add"
+          cbOnClick={cbOnClick}
+          className={css.button}
+        />
       </div>
     </section>
   );

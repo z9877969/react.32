@@ -11,21 +11,37 @@ const data = {
   a: 65,
   b: "",
 };
-const MainPage = () => {
-  const handleAdd = () => {};
+
+const titleOptions = {
+  costs: {
+    ru: "Расходы",
+    en: "Costs",
+    ua: "Вытраты",
+  },
+  incomes: {
+    ru: "Доходы",
+    en: "Incomes",
+    ua: "Прибуток",
+  },
+};
+
+const MainPage = ({ handleOpenTransaction }) => {
   const handleBalance = () => {};
+  const openCostsList = () => handleOpenTransaction("costsList");
+  const openIncomesList = () => handleOpenTransaction("incomesList");
   return (
     <Section>
       <h1>Журнал расходов</h1>
-      {/* {MainInfo({
-          handler: handleAdd,
-          title: "Расходы",
-          dataInfo: costsOptions,
-        })} */}
-      <MainInfo handler={handleAdd} title={"Расходы"} dataInfo={costsOptions} />
       <MainInfo
-        handler={handleAdd}
-        title={"Доходы"}
+        handleOpenTransaction={handleOpenTransaction}
+        title={titleOptions}
+        transType="costs"
+        dataInfo={costsOptions}
+      />
+      <MainInfo
+        handleOpenTransaction={handleOpenTransaction}
+        title={titleOptions}
+        transType="incomes"
         dataInfo={incomesOptions}
       />
       <MainInfo
@@ -33,8 +49,8 @@ const MainPage = () => {
         title={"Баланс"}
         dataInfo={balanceOptions}
       />
-      <Button title="Все расходы" />
-      <Button title="Все доходы" />
+      <Button title="Все расходы" cbOnClick={openCostsList} />
+      <Button title="Все доходы" cbOnClick={openIncomesList} />
     </Section>
   );
 };

@@ -3,12 +3,20 @@ import Section from "../_share/Section/Section";
 import transactionFormOpts from "../../assets/options/transactionFormOpts";
 import TransactionForm from "../TransactionForm/TransactionForm";
 
-const TransactionPage = () => {
+const TransactionPage = ({
+  handleCloseTransaction,
+  handleAddTransaction,
+  transType,
+}) => {
   return (
     <Section>
-      <Button title={"GoBack"} />
-      <h1>title</h1>
-      <TransactionForm options={transactionFormOpts} />
+      <Button title={"GoBack"} cbOnClick={handleCloseTransaction} />
+      <h1>{transType === "costs" ? "Расходы" : "Доходы"}</h1>
+      <TransactionForm
+        transType={transType}
+        options={transactionFormOpts}
+        handleAddTransaction={handleAddTransaction}
+      />
     </Section>
   );
 };
