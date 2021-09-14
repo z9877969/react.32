@@ -1,15 +1,21 @@
 import Section from "../_share/Section/Section";
 import Button from "../_share/Button/Button";
 import s from "./TransactionsList.module.css";
+import { useHistory, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const TransactionsList = ({
-  transactionsList,
-  handleCloseTransaction,
-  title,
-}) => {
+const TransactionsList = () => {
+  const { transType } = useParams();
+  const history = useHistory();
+  const transactions = useSelector((state) => state.transactions);
+  const transactionsList = transactions[transType];
+  const handleGoBack = () => history.push("/");
+
   return (
-    <Section title={title}>
-      <Button title={"GoBack"} cbOnClick={handleCloseTransaction} />
+    <Section
+      title={transType === "costs" ? "Список расходов" : "Список доходов"}
+    >
+      <Button title={"GoBack"} cbOnClick={handleGoBack} />
       <p className={s.item}>
         <span>date</span>
         <span>time</span>

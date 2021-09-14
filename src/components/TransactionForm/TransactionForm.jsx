@@ -1,45 +1,56 @@
-import { Component } from "react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import shortid from "shortid";
 import Form from "../_share/Form/Form";
+import {
+  addCosts,
+  addIncomes,
+} from "../../redux/transactions/transactionsActions";
 
-class TransactionForm extends Component {
-  state = {
+const TransactionForm = ({ options, transType, url, history }) => {
+  const dispatch = useDispatch();
+
+  const [form, setForm] = useState({
     date: "",
     time: "",
-    category: this.props.transType === "costs" ? "Еда" : "Зарплата",
+    category: transType === "costs" ? "Еда" : "Зарплата",
     sum: "",
     currency: "UAH",
     comment: "",
-  };
+  });
 
-  handleChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    this.setState({ [name]: value });
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const { handleAddTransaction, transType } = this.props;
-
-    handleAddTransaction({
-      transaction: { ...this.state, id: shortid.generate() },
-      transType: transType,
+  const handleClick = () =>
+    history.push({
+      pathname: url + "/cat-list",
+      state: {
+        from: history.location,
+      },
     });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const dataForm = { ...form, id: shortid.generate() };
+    transType === "incomes"
+      ? dispatch(addIncomes(dataForm))
+      : dispatch(addCosts(dataForm));
   };
 
-  render() {
-    const { options } = this.props;
-    return (
-      <Form
-        dataForm={this.state}
-        options={options}
-        handleChange={this.handleChange}
-        cbOnSubmit={this.handleSubmit}
-      />
-    );
-  }
-}
+  return (
+    <Form
+      dataForm={form}
+      options={options}
+      handleChange={handleChange}
+      handleClick={handleClick}
+      cbOnSubmit={handleSubmit}
+    />
+  );
+};
 
 export default TransactionForm;
 

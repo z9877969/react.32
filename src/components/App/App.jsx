@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Route, Switch, Render } from "react-router-dom";
 import TransactionsList from "../TransactionsList/TransactionsList";
 import MainPage from "../_pages/MainPage/MainPage";
 import TransactionPage from "../_pages/TransactionPage";
@@ -19,12 +20,6 @@ class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // if(prevProps.search !== this.props.search){
-    //   fetch().then(data => this.setState()).catch()
-    // }
-    // if(prevState.page !== this.state.page){
-    //   fetch().then(data => this.setState()).catch()
-    // }
     if (prevState.costs !== this.state.costs) {
       localStorage.setItem("costs", JSON.stringify(this.state.costs));
     }
@@ -32,8 +27,6 @@ class App extends Component {
       localStorage.setItem("incomes", JSON.stringify(this.state.incomes));
     }
   }
-
-  // setImages = () => getImagesApi({page, search}).then(data => this.setState()).catch()
 
   handleOpenTransaction = (transType) => {
     this.setState({ transType: transType });
@@ -44,7 +37,6 @@ class App extends Component {
   };
 
   handleAddTransaction = ({ transType, transaction }) => {
-    // transType => costs || incomes
     this.setState((prevState) => ({
       [transType]: [...prevState[transType], transaction],
     }));
@@ -56,26 +48,24 @@ class App extends Component {
     const { transType, costs, incomes } = this.state;
 
     return (
-      <>
-        {!transType ? (
-          <MainPage handleOpenTransaction={this.handleOpenTransaction} />
-        ) : transType === "costs" || transType === "incomes" ? (
+      <Switch>
+        <Route path={"/transaction/:transType"}>
           <TransactionPage
             transType={transType}
             handleCloseTransaction={this.handleCloseTransaction}
             handleAddTransaction={this.handleAddTransaction}
           />
-        ) : (
+        </Route>
+        <Route path="/history/:transType">
           <TransactionsList
             transactionsList={transType === "costsList" ? costs : incomes}
-            transList={transType}
-            title={
-              transType === "costsList" ? "Список расходов" : "Список доходов"
-            }
             handleCloseTransaction={this.handleCloseTransaction}
           />
-        )}
-      </>
+        </Route>
+        <Route path="/">
+          <MainPage handleOpenTransaction={this.handleOpenTransaction} />
+        </Route>
+      </Switch>
     );
   }
 }

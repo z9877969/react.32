@@ -1,8 +1,15 @@
+import { useHistory } from "react-router-dom";
 import Button from "../_share/Button/Button";
 import css from "./MainInfo.module.css";
 
-const MainInfo = ({ dataInfo, title, handleOpenTransaction, transType }) => {
-  const cbOnClick = () => handleOpenTransaction(transType);
+const MainInfo = ({ dataInfo, title, transType }) => {
+  const history = useHistory();
+
+  const cbOnClick = () =>
+    history.push({
+      pathname: "/transaction/" + transType,
+      state: { from: history.location },
+    });
   const contentTitle = title[transType]?.ru || "Баланс";
   return (
     <section className={css.section}>
@@ -22,11 +29,7 @@ const MainInfo = ({ dataInfo, title, handleOpenTransaction, transType }) => {
             ))}
           </ul>
         </div>
-        <Button
-          title="Add"
-          cbOnClick={cbOnClick}
-          className={css.button}
-        />
+        <Button title="Add" cbOnClick={cbOnClick} className={css.button} />
       </div>
     </section>
   );

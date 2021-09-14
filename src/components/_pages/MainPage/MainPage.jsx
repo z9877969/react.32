@@ -6,6 +6,7 @@ import {
 } from "../../../assets/options/mainInfoOptions.json";
 import Button from "../../_share/Button/Button";
 import Section from "../../_share/Section/Section";
+import { useHistory, Link } from "react-router-dom";
 const data = {
   dataInfo: [],
   a: 65,
@@ -27,8 +28,6 @@ const titleOptions = {
 
 const MainPage = ({ handleOpenTransaction }) => {
   const handleBalance = () => {};
-  const openCostsList = () => handleOpenTransaction("costsList");
-  const openIncomesList = () => handleOpenTransaction("incomesList");
   return (
     <Section>
       <h1>Журнал расходов</h1>
@@ -49,8 +48,8 @@ const MainPage = ({ handleOpenTransaction }) => {
         title={"Баланс"}
         dataInfo={balanceOptions}
       />
-      <Button title="Все расходы" cbOnClick={openCostsList} />
-      <Button title="Все доходы" cbOnClick={openIncomesList} />
+      <Link to={"/history/costs"}>Все расходы</Link>
+      <Link to={"/history/incomes"}>Все доходы</Link>
     </Section>
   );
 };
