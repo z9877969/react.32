@@ -16,7 +16,7 @@ const CategoriesList = ({ match }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addCategory({ input, transType }));
+    dispatch(addCategory(input, transType));
   };
 
   return (
