@@ -1,15 +1,8 @@
-import Section from "../_share/Section/Section";
-import Button from "../_share/Button/Button";
 import s from "./TransactionsList.module.css";
 
-const TransactionsList = ({
-  transactionsList,
-  handleCloseTransaction,
-  title,
-}) => {
+const TransactionsList = ({ transactions, transactionsList }) => {
   return (
-    <Section title={title}>
-      <Button title={"GoBack"} cbOnClick={handleCloseTransaction} />
+    <>
       <p className={s.item}>
         <span>date</span>
         <span>time</span>
@@ -26,7 +19,7 @@ const TransactionsList = ({
           </li>
         ))}
       </ul>
-    </Section>
+    </>
   );
 };
 
