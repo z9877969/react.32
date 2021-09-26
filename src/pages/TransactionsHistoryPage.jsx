@@ -1,3 +1,4 @@
+import { connect } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import TransactionsList from "../components/TransactionsList/TransactionsList";
 import Button from "../components/_share/Button/Button";
@@ -20,4 +21,10 @@ const TransactionsHistoryPage = ({ transactions }) => {
   );
 };
 
-export default TransactionsHistoryPage;
+const mapStateToProps = (state) => ({
+  // incomes: state.transactions.incomes,
+  // costs: state.transactions.costs,
+  transactions: state.transactions,
+});
+
+export default connect(mapStateToProps)(TransactionsHistoryPage);

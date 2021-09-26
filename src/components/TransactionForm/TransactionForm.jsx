@@ -2,12 +2,13 @@ import PropTypes from "prop-types";
 import Form from "../_share/Form/Form";
 import options from "../../assets/options/transactionFormOpts";
 
-const TransactionForm = ({ transaction, handleChange, handleSubmit }) => {
+const TransactionForm = ({ transaction, handleChange, handleClick, handleSubmit }) => {
   return (
     <Form
       dataForm={transaction}
       options={options}
       handleChange={handleChange}
+      handleClick={handleClick}
       cbOnSubmit={handleSubmit}
     />
   );

@@ -1,12 +1,25 @@
 import { useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import {
+  useHistory,
+  useParams,
+  Route,
+  Switch,
+  useRouteMatch,
+} from "react-router-dom";
+import { connect } from "react-redux";
 import shortid from "shortid";
 import Button from "../components/_share/Button/Button";
 import Section from "../components/_share/Section/Section";
 import TransactionForm from "../components/TransactionForm/TransactionForm";
+import {
+  addCosts,
+  addIncomes,
+} from "../redux/transactions/transactionsActions";
+import CategoriesList from "../components/CategoriesList/CategoriesList";
 
-const TransactionPage = ({ addTransaction }) => {
+const TransactionPage = ({ addIncomesProp, addCostsProp }) => {
   const { transType } = useParams();
+  const { path, url } = useRouteMatch();
   const { push, location } = useHistory();
   const [transaction, setTransaction] = useState(() => ({
     date: "",
@@ -19,6 +32,14 @@ const TransactionPage = ({ addTransaction }) => {
 
   const handleGoBack = () => push(location.state?.from || "/");
 
+  const openCategoriesList = () =>
+    push({
+      pathname: url + "/cat-list",
+      state: {
+        from: location,
+      },
+    });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setTransaction((prev) => ({ ...prev, [name]: value }));
@@ -26,24 +47,44 @@ const TransactionPage = ({ addTransaction }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addTransaction({
-      transaction: { ...transaction, id: shortid.generate() },
-      transType,
-    });
+    // addTransaction({
+    //   transaction: { ...transaction, id: shortid.generate() },
+    //   transType,
+    // });
+    const transactionToSubmit = { ...transaction, id: shortid.generate() };
+    transType === "incomes" && addIncomesProp(transactionToSubmit);
+    transType === "costs" && addCostsProp(transactionToSubmit);
     handleGoBack();
   };
 
   return (
     <Section>
       <Button title={"GoBack"} cbOnClick={handleGoBack} />
-      <h1>{transType === "costs" ? "Расходы" : "Доходы"}</h1>
-      <TransactionForm
-        transaction={transaction}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-      />
+      <Switch>
+        <Route path={path + "/cat-list"} component={CategoriesList} />
+        <Route path={path}>
+          <h1>{transType === "costs" ? "Расходы" : "Доходы"}</h1>
+          <TransactionForm
+            transaction={transaction}
+            handleChange={handleChange}
+            handleClick={openCategoriesList}
+            handleSubmit={handleSubmit}
+          />
+        </Route>
+      </Switch>
     </Section>
   );
 };
+// /transaction/:transType/cat-list
 
-export default TransactionPage;
+const mapStateToProps = (state) => ({
+  incomes: state.transactions.incomes,
+  costs: state.transactions.costs,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  addIncomesProp: (transaction) => dispatch(addIncomes(transaction)),
+  addCostsProp: (transaction) => dispatch(addCosts(transaction)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionPage);
