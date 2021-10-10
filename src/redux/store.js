@@ -12,6 +12,7 @@ import {
 import storage from "redux-persist/lib/storage";
 import transactions from "./transactions/transactionsReducer";
 import categories from "./categories/categoriesReducer";
+import auth from "./auth/authReducer";
 
 const transactionsPersistConfig = {
   key: "transactions",
@@ -22,7 +23,7 @@ const transactionsPersistConfig = {
 
 const store = configureStore({
   reducer: {
-    // my: myReducer,
+    auth,
     transactions: persistReducer(transactionsPersistConfig, transactions),
     categories,
   },
